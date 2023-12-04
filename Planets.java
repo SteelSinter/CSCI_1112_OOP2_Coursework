@@ -23,12 +23,9 @@ public class Planets extends Application{
 		Circle sun = new Circle(109);
 		sun.setStroke(Color.YELLOW);
 		sun.setFill(Color.YELLOW);
-		Circle earth = new Circle(1 * SIZE_SCALE);
-		earth.setFill(Color.BLUE);
-		earth.setStroke(Color.BLUE);
+		Planet earth = new Planet(1, Color.BLUE);
 		Text earthText = new Text("EARTH");
 		earthText.setStroke(Color.WHITE);
-		earthText.translateXProperty().bind(earth.centerXProperty());
 		Circle earthOrbit = new Circle(600);
 		earthOrbit.setStroke(Color.BLACK);
 		earthOrbit.setFill(Color.BLACK);
@@ -93,7 +90,9 @@ public class Planets extends Application{
 		private Circle circle;
 		
 		Planet(int radius, Paint color) {
-			circle = new Circle(radius);
+			circle = new Circle(radius * SIZE_SCALE);
+			circle.setFill(color);
+			circle.setStroke(color);
 			this.getChildren().add(circle);
 		}
 	}
