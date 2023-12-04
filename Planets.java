@@ -27,7 +27,7 @@ public class Planets extends Application{
 		Text earthText = new Text("EARTH");
 		earthText.setStroke(Color.WHITE);
 		Circle earthOrbit = new Circle(600);
-		earthOrbit.setStroke(Color.BLACK);
+		earthOrbit.setStroke(Color.RED);
 		earthOrbit.setFill(Color.BLACK);
 		Circle moon = new Circle(1 * SIZE_SCALE);
 		moon.setFill(Color.WHITE);
@@ -93,7 +93,15 @@ public class Planets extends Application{
 			circle = new Circle(radius * SIZE_SCALE);
 			circle.setFill(color);
 			circle.setStroke(color);
+			circle.setCenterX(this.getLayoutX());
+			circle.setCenterY(this.getLayoutY());
 			this.getChildren().add(circle);
+			circle.setCenterX(this.getWidth() / 2);
+			
+		}
+		
+		public Circle getCircle() {
+			return circle;
 		}
 	}
 
