@@ -1,4 +1,5 @@
 package pack;
+import javafx.animation.Animation.Status;
 import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
@@ -25,7 +26,7 @@ public class Exercise15 extends Application {
 		circle.setStroke(Color.TRANSPARENT);
 		
 		Polygon path = new Polygon();
-		path.setFill(Color.TRANSPARENT);
+		path.setFill(Color.WHITE);
 		path.setStroke(Color.BLACK);
 		
 		ObservableList<Double> list = path.getPoints();
@@ -48,15 +49,20 @@ public class Exercise15 extends Application {
 		pt.setDuration(Duration.millis(5000));
 		pt.setPath(path);
 		pt.setNode(rec);
-		pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+		//pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 		pt.setCycleCount(Timeline.INDEFINITE);
 		pt.setAutoReverse(false);
 		pt.setInterpolator(Interpolator.LINEAR);
 		pt.play();
 		
-		System.out.println(pt.getStatus());
+		path.setOnMouseClicked(e -> {
+			if (pt.getStatus().equals(Status.RUNNING))
+				pt.pause();
+			else
+				pt.play();
+		});
 		
-		primaryStage.setAlwaysOnTop(true);
+		//primaryStage.setAlwaysOnTop(true);
 		
 		primaryStage.setScene(scene);
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
