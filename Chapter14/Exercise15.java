@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -19,9 +20,23 @@ public class Exercise15 extends Application {
 	public void start(Stage primaryStage) {
 		Rectangle rec = new Rectangle(30, 60);
 		
-		Octagon path = new Octagon();
+		Circle circle = new Circle(150);
+		circle.setFill(Color.TRANSPARENT);
+		circle.setStroke(Color.TRANSPARENT);
+		
+		Polygon path = new Polygon();
+		path.setFill(Color.TRANSPARENT);
+		path.setStroke(Color.BLACK);
+		
+		ObservableList<Double> list = path.getPoints();
+		
+		for (int i = 0; i < 6; i++) {
+			list.add(circle.getCenterX() + circle.getRadius() * Math.cos(2 * i * Math.PI / 6));
+			list.add(circle.getCenterY() - circle.getRadius() * Math.sin(2 * i * Math.PI / 6));
+		}
 		
 		StackPane pane = new StackPane();
+		pane.getChildren().add(circle);
 		pane.getChildren().add(path);
 		pane.getChildren().add(rec);
 		System.out.println(pane.getChildren().toString());
@@ -31,7 +46,7 @@ public class Exercise15 extends Application {
 		
 		PathTransition pt = new PathTransition();
 		pt.setDuration(Duration.millis(5000));
-		pt.setPath(path.getOctagon());
+		pt.setPath(path);
 		pt.setNode(rec);
 		pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 		pt.setCycleCount(Timeline.INDEFINITE);
@@ -58,23 +73,7 @@ public class Exercise15 extends Application {
 		Polygon polygon;
 		
 		private void paint() {
-			polygon = new Polygon();
-			polygon.setFill(Color.TRANSPARENT);
-			polygon.setStroke(Color.BLACK);
 			
-			ObservableList<Double> list = polygon.getPoints();
-			
-			double centerX = getWidth() / 2;
-			double centerY = getHeight() / 2;
-			double radius = Math.min(getWidth(), getHeight()) * 0.4;
-			
-			for (int i = 0; i < 6; i++) {
-				list.add(centerX + radius * Math.cos(2 * i * Math.PI / 6));
-				list.add(centerY - radius * Math.sin(2 * i * Math.PI / 6));
-			}
-			
-			getChildren().clear();
-			getChildren().add(polygon);
 		}
 		
 		public Polygon getOctagon() {
