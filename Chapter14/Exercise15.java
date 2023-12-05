@@ -87,29 +87,5 @@ public class Exercise15 extends Application {
 		Application.launch();
 
 	}
-	
-	class Octagon extends Pane {
-		Polygon polygon;
-		
-		private void paint() {
-			
-		}
-		
-		public Polygon getOctagon() {
-			return polygon;
-		}
-		
-		@Override
-		public void setWidth(double width) {
-			super.setWidth(width);
-			paint();
-		}
-		
-		@Override
-		public void setHeight(double height) {
-			super.setHeight(height);
-			paint();
-		}
-	}
 
 }
