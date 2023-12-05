@@ -1,5 +1,6 @@
 package pack;
 import javafx.animation.Animation.Status;
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
@@ -40,7 +41,6 @@ public class Exercise15 extends Application {
 		pane.getChildren().add(circle);
 		pane.getChildren().add(path);
 		pane.getChildren().add(rec);
-		System.out.println(pane.getChildren().toString());
 		
 		Scene scene = new Scene(pane, 400, 400);
 		scene.setFill(Color.TRANSPARENT);
@@ -55,11 +55,24 @@ public class Exercise15 extends Application {
 		pt.setInterpolator(Interpolator.LINEAR);
 		pt.play();
 		
+		FadeTransition ft = new FadeTransition();
+		ft.setDuration(Duration.millis(1000));
+		ft.setNode(rec);
+		ft.setFromValue(1);
+		ft.setToValue(0);
+		ft.setCycleCount(Timeline.INDEFINITE);
+		ft.setAutoReverse(true);
+		ft.play();
+		
 		path.setOnMouseClicked(e -> {
-			if (pt.getStatus().equals(Status.RUNNING))
+			if (pt.getStatus().equals(Status.RUNNING)) {
 				pt.pause();
-			else
+				ft.pause();
+			}
+			else {
 				pt.play();
+				ft.play();
+			}
 		});
 		
 		//primaryStage.setAlwaysOnTop(true);
