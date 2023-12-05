@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class Exercise15 extends Application{
+public class Exercise15 extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		Rectangle rec = new Rectangle(30, 60);
@@ -22,7 +22,8 @@ public class Exercise15 extends Application{
 		Octagon path = new Octagon();
 		
 		StackPane pane = new StackPane();
-		pane.getChildren().addAll(path, rec);
+		pane.getChildren().add(path);
+		pane.getChildren().add(rec);
 		System.out.println(pane.getChildren().toString());
 		
 		Scene scene = new Scene(pane, 400, 400);
@@ -35,10 +36,12 @@ public class Exercise15 extends Application{
 		pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 		pt.setCycleCount(Timeline.INDEFINITE);
 		pt.setAutoReverse(false);
-		
 		pt.setInterpolator(Interpolator.LINEAR);
-		
 		pt.play();
+		
+		System.out.println(pt.getStatus());
+		
+		primaryStage.setAlwaysOnTop(true);
 		
 		primaryStage.setScene(scene);
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
