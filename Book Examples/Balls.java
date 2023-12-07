@@ -16,27 +16,32 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Balls extends Application {
-	public static final int AMOUNT_OF_CIRCLES = 100;
+	public static final int AMOUNT_OF_CIRCLES = 300;
 	@Override
 	public void start(Stage primaryStage) {
 		ArrayList<cCircle> circles = new ArrayList<cCircle>();
-		Pane pane = new GridPane();
+		Pane pane = new Pane();
 		pane.setPadding(new Insets(10));
+		
 		for (int i = 0; i < AMOUNT_OF_CIRCLES; i++) {
 			cCircle newCir = new cCircle(randomRange(1, 10));
 			newCir.setFill(Color.rgb(
 					randomRange(0, 255), 
 					randomRange(0, 255), 
 					randomRange(0, 255)));
-			newCir.setLayoutY(newCir.getRadius() * 10);
-			newCir.setLayoutX(newCir.getRadius());
 			circles.add(newCir);
 		}
 		
+		
 		circles.sort(Comparator.naturalOrder());
+		
+		int r = 0;
 		
 		for (cCircle c: circles) {
 			pane.getChildren().add(c);
+			c.setCenterY(c.getRadius() * 10);
+			c.setCenterX(r);
+			r += (int)c.getRadius();
 		}
 		
 		Scene scene = new Scene(pane, 1366, 700);
@@ -44,6 +49,7 @@ public class Balls extends Application {
 		
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		primaryStage.setScene(scene);
+		primaryStage.setAlwaysOnTop(true);
 		primaryStage.setTitle("Balls");
 		primaryStage.show();
 	}
