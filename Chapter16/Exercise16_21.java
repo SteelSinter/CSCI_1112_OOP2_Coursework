@@ -1,7 +1,3 @@
-/*
- * Author: James Jesus
- * Date: 12/7/2023
- */
 package pack;
 
 import javafx.animation.KeyFrame;
