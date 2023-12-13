@@ -3,8 +3,7 @@ public class IORealWorld {
 
 	public static void main(String[] args) {
 		if (appendToFile()) {
-			System.out.println("Sum")
-			sumOfFile();
+			System.out.println("Sum" + sumOfFile());
 		}
 
 	}
