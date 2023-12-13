@@ -3,7 +3,7 @@ public class IORealWorld {
 
 	public static void main(String[] args) {
 		if (appendToFile()) {
-			System.out.println("Sum" + sumOfFile());
+			System.out.println("Sum of file: " + sumOfFile());
 		}
 
 	}
@@ -13,8 +13,8 @@ public class IORealWorld {
 				new FileOutputStream("Exercise17_03.dat")))
 		) {
 			for (int i = 0; i < 100; i++) {
-				output.writeInt((int)(Math.random() * 10));
-				output.writeUTF(" ");
+				int rand = (int)(Math.random() * 10);
+				output.writeInt(rand);
 			}
 			return true;
 		}
@@ -34,7 +34,6 @@ public class IORealWorld {
 			int v;
 			while ((v = input.read()) != -1) {
 				sum += v;
-				System.out.println(v);
 			}
 			return sum;
 		}
