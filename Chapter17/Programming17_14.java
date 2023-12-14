@@ -93,9 +93,4 @@ public class Programming17_14 extends Application {
 
 	}
 	
-	/*
-	 * String fileName = tfInputFile.getText();
-			
-	 */
-
 }
