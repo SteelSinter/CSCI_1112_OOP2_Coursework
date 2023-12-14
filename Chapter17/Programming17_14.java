@@ -1,3 +1,7 @@
+/*
+ * Author: James Jesus
+ * Date: 12/14/2023
+ */
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -15,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 public class Programming17_14 extends Application {
 	String inputFileName;
