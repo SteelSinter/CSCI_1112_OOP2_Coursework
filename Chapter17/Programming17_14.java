@@ -23,7 +23,6 @@ public class Programming17_14 extends Application {
 		Text outputFileText = new Text("Enter a name for the encrypted file.");
 		TextField tfOutputFile = new TextField();
 		Text status = new Text();
-		status
 		Button bt = new Button("Encrypt");
 		bt.setDisable(true);
 		
