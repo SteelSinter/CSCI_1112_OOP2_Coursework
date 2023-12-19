@@ -1,8 +1,13 @@
+import java.util.Scanner;
 
 public class RecursionFundamental {
 
 	public static void main(String[] args) {
-		System.out.println(gcd(15, 6));
+		Scanner input = new Scanner(System.in);
+		while (true) {
+			System.out.println("Enter 2 integers to get the greatest common factor:");
+			System.out.println(gcd(input.nextInt(), input.nextInt()));
+		}
 
 	}
 	
