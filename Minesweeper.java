@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 public class Minesweeper extends Application {
 	final String BUTTON_STYLE = "-fx-border-radius: 0; -fx-border-color: #999999;"
@@ -43,6 +44,9 @@ public class Minesweeper extends Application {
 				for (int r = 0; r < height; r++) {
 					int col = c, row = r;
 					Button bt = new Button();
+					bt.setText(" ");
+					bt.setFont(new Font("", 15));
+					bt.set
 					matrix[c][r] = false;
 					bt.setMinSize(squareSize, squareSize);
 					bt.setStyle(BUTTON_STYLE);
@@ -55,6 +59,26 @@ public class Minesweeper extends Application {
 						}
 						if (matrix[col][row]) {
 							b.setDisable(true);
+						}
+					});
+					
+					bt.setOnMouseClicked(e -> {
+						System.out.println(e.getButton());
+						if (e.getButton().toString().equals("SECONDARY")) {
+							Button b = (Button)nodeAt(col, row);
+							System.out.println(row);
+							switch (b.getText()) {
+							case " ":
+								b.setText("P");
+								break;
+							case "P":
+								b.setText("?");
+								break;
+							case "?":
+								b.setText(" ");
+							}
+							System.out.println("Right click");
+							System.out.println("C:" + col + " " + "R:" + row);
 						}
 					});
 					add(bt, c, r);
@@ -86,7 +110,6 @@ public class Minesweeper extends Application {
 				for (int r = 0; r < height; r++) {
 					if (matrix[c][r] == true) {
 						Button bt = (Button)nodeAt(c, r);
-						bt.setText("M");
 						bt.setDisable(true);
 						bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
 					}
