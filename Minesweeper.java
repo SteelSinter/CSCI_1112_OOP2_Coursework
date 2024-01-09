@@ -47,12 +47,14 @@ public class Minesweeper extends Application {
 					bt.setMinSize(squareSize, squareSize);
 					bt.setStyle(BUTTON_STYLE);
 					bt.setOnAction(e -> {
+						Button b = (Button)nodeAt(col, row);
 						System.out.println("C:" + col + " " + "R:" + row);
-						Button b = (Button)nodeAt(row, col);
-						System.out.println(b.getText());
-						System.out.println(firstMove);
+						System.out.println("first move: " + firstMove);
 						if (firstMove) {
 							addMines(MINES, col, row);
+						}
+						if (matrix[col][row]) {
+							b.setDisable(true);
 						}
 					});
 					add(bt, c, r);
@@ -63,13 +65,11 @@ public class Minesweeper extends Application {
 		
 		private void addMines(int mines, int firstC, int firstR) {
 			int mineChance = (int)(((double)mines / (width * height)) * 1000);
-			//System.out.println(mineChance);
 			while (mines > 0) {
 				for (int c = 0; c < width; c++) {
 					for (int r = 0; r < height; r++) {
 						int rand = (int)(Math.random() * 1000);
-						//System.out.println(rand);
-						if (rand == mineChance && c != firstC && r != firstR) {
+						if (rand == mineChance && c != firstC && r != firstR && !(matrix[c][r])) {
 							matrix[c][r] = true;
 							mines--;
 							System.out.println(mines);
@@ -78,16 +78,17 @@ public class Minesweeper extends Application {
 				}
 			}
 			firstMove = false;
-			revealMines(); // tmeporeoroperpoa
+			revealMines(); // temporary
 		}
 		
 		public void revealMines() {
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
-					if (matrix[c][r]) {
+					if (matrix[c][r] == true) {
 						Button bt = (Button)nodeAt(c, r);
 						bt.setText("M");
-						bt.setStyle(BUTTON_STYLE + ";-fx-text-fill: #ff0000");
+						bt.setDisable(true);
+						bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
 					}
 				}
 			}
