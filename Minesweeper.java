@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class Minesweeper extends Application {
 	final String BUTTON_STYLE = "-fx-border-radius: 0; -fx-border-color: #999999;"
 			+ " -fx-background-radius: 0; -fx-background-color: #ffffff;"/* -fx-text-fill: #999999*/;
+	final String FLAG = "P";
 	final int MINES = 15;
 	int width = 10, height = 10, squareSize = 35;
 	
@@ -37,10 +38,12 @@ public class Minesweeper extends Application {
 	
 	class Board extends GridPane {
 		private boolean[][] matrix;
+		private int[][] numberMatrix;
 		private boolean firstMove = true;
 		
 		Board(int width, int height) {
 			matrix = new boolean[width][height];
+			numberMatrix = new int[width][height];
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
 					int col = c, row = r;
@@ -62,9 +65,9 @@ public class Minesweeper extends Application {
 							System.out.println(row);
 							switch (b.getText()) {
 							case " ":
-								b.setText("P");
+								b.setText(FLAG);
 								break;
-							case "P":
+							case FLAG:
 								b.setText("?");
 								break;
 							case "?":
@@ -99,15 +102,16 @@ public class Minesweeper extends Application {
 		
 		public void dig(int c, int r) {
 			boolean isMine = matrix[c][r];
-			Button b = (Button)nodeAt(c, r);
+			Button bt = (Button)nodeAt(c, r);
+			boolean isMarked = bt.getText().equals("?") || bt.getText().equals(FLAG);
 			System.out.println("C:" + c + " " + "R:" + r);
 			System.out.println("first move: " + firstMove);
 			if (firstMove) {
 				addMines(MINES, c, r);
 			}
-			if (isMine) {
-				b.setDisable(true);
-				b.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
+			if (isMine && !isMarked) {
+				bt.setDisable(true);
+				bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
 			}
 		}
 		
