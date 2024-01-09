@@ -50,6 +50,7 @@ public class Minesweeper extends Application {
 						System.out.println("C:" + col + " " + "R:" + row);
 						Button b = (Button)nodeAt(row, col);
 						System.out.println(b.getText());
+						System.out.println(firstMove);
 						if (firstMove) {
 							addMines(MINES, col, row);
 						}
