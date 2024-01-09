@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,21 +46,13 @@ public class Minesweeper extends Application {
 					int col = c, row = r;
 					Button bt = new Button();
 					bt.setText(" ");
-					bt.setFont(new Font("", 15));
-					bt.set
+					bt.setFont(new Font("", 19));
 					matrix[c][r] = false;
 					bt.setMinSize(squareSize, squareSize);
 					bt.setStyle(BUTTON_STYLE);
+					bt.setPadding(new Insets(0));
 					bt.setOnAction(e -> {
-						Button b = (Button)nodeAt(col, row);
-						System.out.println("C:" + col + " " + "R:" + row);
-						System.out.println("first move: " + firstMove);
-						if (firstMove) {
-							addMines(MINES, col, row);
-						}
-						if (matrix[col][row]) {
-							b.setDisable(true);
-						}
+						dig(col, row);
 					});
 					
 					bt.setOnMouseClicked(e -> {
@@ -102,7 +95,20 @@ public class Minesweeper extends Application {
 				}
 			}
 			firstMove = false;
-			revealMines(); // temporary
+		}
+		
+		public void dig(int c, int r) {
+			boolean isMine = matrix[c][r];
+			Button b = (Button)nodeAt(c, r);
+			System.out.println("C:" + c + " " + "R:" + r);
+			System.out.println("first move: " + firstMove);
+			if (firstMove) {
+				addMines(MINES, c, r);
+			}
+			if (isMine) {
+				b.setDisable(true);
+				b.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
+			}
 		}
 		
 		public void revealMines() {
