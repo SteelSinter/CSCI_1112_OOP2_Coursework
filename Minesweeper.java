@@ -91,7 +91,13 @@ public class Minesweeper extends Application {
 		private void countMines() {
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
-					//
+					Button bt = (Button)nodeAt(c, r);
+					if (isMine(c, r)) {
+						numberMatrix[c][r] = -1;
+					}
+					else {
+						// count mines aorund it
+					}
 				}
 			}
 		}
