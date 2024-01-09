@@ -54,27 +54,15 @@ public class Minesweeper extends Application {
 					bt.setMinSize(squareSize, squareSize);
 					bt.setStyle(BUTTON_STYLE);
 					bt.setPadding(new Insets(0));
-					bt.setOnAction(e -> {
-						dig(col, row);
-					});
 					
 					bt.setOnMouseClicked(e -> {
-						System.out.println(e.getButton());
-						if (e.getButton().toString().equals("SECONDARY")) {
-							Button b = (Button)nodeAt(col, row);
-							System.out.println(row);
-							switch (b.getText()) {
-							case " ":
-								b.setText(FLAG);
-								break;
-							case FLAG:
-								b.setText("?");
-								break;
-							case "?":
-								b.setText(" ");
-							}
-							System.out.println("Right click");
-							System.out.println("C:" + col + " " + "R:" + row);
+						switch (e.getButton().toString()) {
+						case "PRIMARY":
+							dig(col, row);
+							break;
+						case "SECONDARY":
+							flag(col, row);
+							break;
 						}
 					});
 					add(bt, c, r);
@@ -89,7 +77,7 @@ public class Minesweeper extends Application {
 				for (int c = 0; c < width; c++) {
 					for (int r = 0; r < height; r++) {
 						int rand = (int)(Math.random() * 1000);
-						if (rand == mineChance && c != firstC && r != firstR && !(matrix[c][r])) {
+						if (rand == mineChance && c != firstC && r != firstR && !isMine(c, r)) {
 							matrix[c][r] = true;
 							mines--;
 							System.out.println(mines);
@@ -100,25 +88,47 @@ public class Minesweeper extends Application {
 			firstMove = false;
 		}
 		
+		private void countMines() {
+			for (int c = 0; c < width; c++) {
+				for (int r = 0; r < height; r++) {
+					//
+				}
+			}
+		}
+		
 		public void dig(int c, int r) {
-			boolean isMine = matrix[c][r];
 			Button bt = (Button)nodeAt(c, r);
-			boolean isMarked = bt.getText().equals("?") || bt.getText().equals(FLAG);
-			System.out.println("C:" + c + " " + "R:" + r);
-			System.out.println("first move: " + firstMove);
+			//System.out.println("C:" + c + " " + "R:" + r);
 			if (firstMove) {
 				addMines(MINES, c, r);
 			}
-			if (isMine && !isMarked) {
+			if (isMine(c, r) && !isMarked(c, r)) {
 				bt.setDisable(true);
 				bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
 			}
 		}
 		
+		public void flag(int c, int r) {
+			Button b = (Button)nodeAt(c, r);
+			System.out.println(r);
+			switch (b.getText()) {
+			case " ":
+				b.setText(FLAG);
+				break;
+			case FLAG:
+				b.setText("?");
+				break;
+			case "?":
+				b.setText(" ");
+			}
+			System.out.println("Right click");
+			System.out.println("C:" + c + " " + "R:" + r);
+		}
+		
 		public void revealMines() {
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
-					if (matrix[c][r] == true) {
+					if (isMine(c, r)) {
 						Button bt = (Button)nodeAt(c, r);
 						bt.setDisable(true);
 						bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
@@ -134,6 +144,15 @@ public class Minesweeper extends Application {
 		        }
 		    }
 		    return null;
+		}
+		
+		public boolean isMine(int c, int r) {
+			return matrix[c][r];
+		}
+		
+		public boolean isMarked(int c, int r) {
+			Button bt = (Button)nodeAt(c, r);
+			return bt.getText().equals("?") || bt.getText().equals(FLAG);
 		}
 	}
 
