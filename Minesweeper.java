@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 /**
@@ -47,6 +48,7 @@ public class Minesweeper extends Application {
 		private int[][] numberMatrix;
 		private boolean firstMove = true;
 		private int width, height;
+		int squaresRevealed = 0;
 		
 		Board(int width, int height) {
 			this.width = width;
@@ -74,10 +76,21 @@ public class Minesweeper extends Application {
 							flag(col, row);
 							break;
 						}
+						
+						if (squaresRevealed >= getWidth() * getHeight())
+							win();
 					});
 					add(bt, c, r);
 				}
 			}
+		}
+		
+		private void win() {
+			System.out.println("win triggered.");
+		}
+		
+		private void lose() {
+			System.out.println("lose triggered");
 		}
 		
 		private void addMines(int mines, int firstC, int firstR) {
@@ -102,7 +115,6 @@ public class Minesweeper extends Application {
 				for (int r = 0; r < height; r++) {
 					if (!isMine(c, r) && inBounds(c, r)) {
 						numberMatrix[c][r] = countBorderingMines(c, r);
-						return;
 					}
 				}
 			}
@@ -129,13 +141,17 @@ public class Minesweeper extends Application {
 			}
 			if (isMine(c, r) && !isMarked(c, r)) {
 				bt.setDisable(true);
-				bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
+				bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000; -fx-opacity: 1;");
+				revealMines();
+				lose();
 			}
 			if (!isMine(c, r) && !isMarked(c, r)) {
-				System.out.println(numberMatrix[c][r]);
 				bt.setText(String.valueOf(numberMatrix[c][r]));
-				System.out.println(bt.getText());
+				bt.setDisable(true);
+				bt.setStyle(BUTTON_STYLE + "; -fx-opacity: 1;");
+				bt.setTextFill(setColor(numberMatrix[c][r]));
 			}
+			squaresRevealed++;
 		}
 		
 		public void flag(int c, int r) {
@@ -173,6 +189,22 @@ public class Minesweeper extends Application {
 		    }
 		    return null;
 		}
+		
+		public Color setColor(int c) {
+			switch (c) {
+			case 0: return Color.GRAY;
+			case 1: return Color.BLUE;
+			case 2: return Color.GREEN;
+			case 3: return Color.RED;
+			case 4: return Color.DARKBLUE;
+			case 5: return Color.DARKRED;
+			case 6: return Color.TEAL;
+			case 7: return Color.BLACK;
+			case 8: return Color.MAGENTA;
+			default: return Color.BLACK;
+				
+			}
+		}
 		/**
 		 * Checks a spot for a mine.
 		 * 
@@ -185,7 +217,7 @@ public class Minesweeper extends Application {
 		}
 		
 		public boolean inBounds(int c, int r) {
-			if (c < getBoardWidth() && c > 0 && r < getBoardHeight() && r > 0) {
+			if (c < getBoardWidth() && c >= 0 && r < getBoardHeight() && r >= 0) {
 				return true;
 			}
 			return false;
@@ -203,6 +235,7 @@ public class Minesweeper extends Application {
 		public int getBoardHeight() {
 			return height;
 		}
+		
 	}
 
 }
