@@ -100,26 +100,17 @@ public class Minesweeper extends Application {
 		private void countMines() {
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
-					Button bt = (Button)nodeAt(c, r);
-					if (isMine(c, r)) {
-						numberMatrix[c][r] = -1;
+					if (!isMine(c, r) && inBounds(c, r)) {
+						numberMatrix[c][r] = countBorderingMines(c, r);
 						return;
 					}
-					numberMatrix[c][r] = countBorderingMines(c, r);
-					System.out.println(countBorderingMines(c, r));
 				}
 			}
 		}
 		
 		private int countBorderingMines(int col, int row) {
 			int mines = 0;
-			for (int c = col - 1; c <  col + 1; c++) {
-				for (int r = row - 1; r < row + 1; r++) {
-					if (inBounds(col + c, row + r) && isMine(col + c, row + r) && !(c == 0 && r == 0)) {
-						mines++;
-					}
-				}
-			}
+			if (inBounds(c, r))
 			return mines;
 		}
 		
