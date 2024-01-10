@@ -108,9 +108,16 @@ public class Minesweeper extends Application {
 			}
 		}
 		
+		
 		private int countBorderingMines(int col, int row) {
 			int mines = 0;
-			if (inBounds(c, r) &&)
+			int[][] cords = {{col - 1, row - 1}, {col, row - 1}, {col + 1, row - 1}, 
+					{col - 1, row}, {col + 1, row}, {col - 1, row + 1}, {col, row + 1}, {col + 1, row + 1}
+			};
+			for (int i = 0; i < 8; i++) {
+				if (inBounds(cords[i][0], cords [i][1]) && isMine(cords[i][0], cords [i][1]))
+					mines++;
+			}
 			return mines;
 		}
 		
