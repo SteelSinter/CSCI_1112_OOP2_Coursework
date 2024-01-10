@@ -18,7 +18,7 @@ public class Minesweeper extends Application {
 	final String BUTTON_STYLE = "-fx-border-radius: 0; -fx-border-color: #999999;"
 			+ " -fx-background-radius: 0; -fx-background-color: #ffffff;"/* -fx-text-fill: #999999*/;
 	final String FLAG = "P";
-	final int MINES = 15;
+	int mines = 15;
 	int width = 10, height = 10, squareSize = 35;
 	
 	@Override
@@ -49,7 +49,12 @@ public class Minesweeper extends Application {
 		private boolean firstMove = true;
 		private int width, height;
 		int squaresRevealed = 0;
-		
+		/**
+		 * Holds all the data and operations for the gameboard.
+		 * 
+		 * @param width Width of the board.
+		 * @param height Height of the board.
+		 */
 		Board(int width, int height) {
 			this.width = width;
 			this.height = height;
@@ -77,22 +82,41 @@ public class Minesweeper extends Application {
 							break;
 						}
 						
-						if (squaresRevealed >= getWidth() * getHeight())
+						if (squaresRevealed >= getWidth() * getHeight() - mines)
 							win();
 					});
 					add(bt, c, r);
 				}
 			}
 		}
-		
+		/**
+		 * Triggers win state.
+		 */
 		private void win() {
 			System.out.println("win triggered.");
 		}
-		
+		/**
+		 * Triggers game over state.
+		 */
 		private void lose() {
-			System.out.println("lose triggered");
+			for (int c = 0; c < width; c++) {
+				for (int r = 0; r < height; r++) {
+					Button bt = (Button)nodeAt(c, r);
+					if (!bt.isDisabled()) {
+						bt.setDisable(true);
+						bt.setStyle(BUTTON_STYLE + "; -fx-opacity: 1;");
+					}
+				}
+			}
 		}
-		
+		/**
+		 * Places the mines on a hidden matrix with a random chance based on the amount of mines.
+		 * Cannot place a mine on the first square chosen by the player.
+		 * 
+		 * @param mines Number of mines to place.
+		 * @param firstC First column chosen.
+		 * @param firstR First row chosen.
+		 */
 		private void addMines(int mines, int firstC, int firstR) {
 			int mineChance = (int)(((double)mines / (width * height)) * 1000);
 			while (mines > 0) {
@@ -109,18 +133,27 @@ public class Minesweeper extends Application {
 			}
 			firstMove = false;
 		}
-		
+		/**
+		 * Counts the mines on the board and assigns a number to a hidden matrix for each square.
+		 */
 		private void countMines() {
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
 					if (!isMine(c, r) && inBounds(c, r)) {
 						numberMatrix[c][r] = countBorderingMines(c, r);
 					}
+					else
+						numberMatrix[c][r] = -1;
 				}
 			}
 		}
-		
-		
+		/**
+		 * Counts the number of bordering mines for a square.
+		 * 
+		 * @param col
+		 * @param row
+		 * @return Number of mines.
+		 */
 		private int countBorderingMines(int col, int row) {
 			int mines = 0;
 			int[][] cords = {{col - 1, row - 1}, {col, row - 1}, {col + 1, row - 1}, 
@@ -132,11 +165,29 @@ public class Minesweeper extends Application {
 			}
 			return mines;
 		}
-		
+		/**
+		 * Digs the places around a square.
+		 * @param col
+		 * @param row
+		 */
+		private void digAround(int col, int row) {
+			int[][] cords = {{col - 1, row - 1}, {col, row - 1}, {col + 1, row - 1}, 
+					{col - 1, row}, {col + 1, row}, {col - 1, row + 1}, {col, row + 1}, {col + 1, row + 1}
+			};
+			for (int i = 0; i < 8; i++) {
+				if (inBounds(cords[i][0], cords [i][1]) && !((Button)nodeAt(cords[i][0], cords [i][1])).isDisabled())
+					dig(cords[i][0], cords [i][1]);
+			}
+		}
+		/**
+		 * Digs a spot. Digs the spots around it if 0. Game over if it's a mine.
+		 * @param c
+		 * @param r
+		 */
 		public void dig(int c, int r) {
 			Button bt = (Button)nodeAt(c, r);
 			if (firstMove) {
-				addMines(MINES, c, r);
+				addMines(mines, c, r);
 				countMines();
 			}
 			if (isMine(c, r) && !isMarked(c, r)) {
@@ -146,14 +197,21 @@ public class Minesweeper extends Application {
 				lose();
 			}
 			if (!isMine(c, r) && !isMarked(c, r)) {
-				bt.setText(String.valueOf(numberMatrix[c][r]));
+				int number = numberMatrix[c][r];
+				bt.setText(String.valueOf(number));
 				bt.setDisable(true);
 				bt.setStyle(BUTTON_STYLE + "; -fx-opacity: 1;");
-				bt.setTextFill(setColor(numberMatrix[c][r]));
+				bt.setTextFill(setNumberColor(number));
+				if (number == 0)
+					digAround(c, r);
 			}
 			squaresRevealed++;
 		}
-		
+		/**
+		 * Flags or marks a spot.
+		 * @param c
+		 * @param r
+		 */
 		public void flag(int c, int r) {
 			Button b = (Button)nodeAt(c, r);
 			System.out.println(r);
@@ -168,7 +226,9 @@ public class Minesweeper extends Application {
 				b.setText(" ");
 			}
 		}
-		
+		/**
+		 * Reveals all mines on the board.
+		 */
 		public void revealMines() {
 			for (int c = 0; c < width; c++) {
 				for (int r = 0; r < height; r++) {
@@ -180,7 +240,12 @@ public class Minesweeper extends Application {
 				}
 			}
 		}
-		
+		/**
+		 * 
+		 * @param col
+		 * @param row
+		 * @return Node at given index.
+		 */
 		public Node nodeAt(int col, int row) {
 		    for (Node node : getChildren()) {
 		        if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
@@ -189,8 +254,12 @@ public class Minesweeper extends Application {
 		    }
 		    return null;
 		}
-		
-		public Color setColor(int c) {
+		/**
+		 * Get a color for each number.
+		 * @param c
+		 * @return Color for given int.
+		 */
+		public Color setNumberColor(int c) {
 			switch (c) {
 			case 0: return Color.GRAY;
 			case 1: return Color.BLUE;
@@ -202,7 +271,6 @@ public class Minesweeper extends Application {
 			case 7: return Color.BLACK;
 			case 8: return Color.MAGENTA;
 			default: return Color.BLACK;
-				
 			}
 		}
 		/**
@@ -210,28 +278,46 @@ public class Minesweeper extends Application {
 		 * 
 		 * @param c column
 		 * @param r row
-		 * @return True if that spot is a mine.
+		 * @return
 		 */
 		public boolean isMine(int c, int r) {
 			return matrix[c][r];
 		}
-		
+		/**
+		 * Checks if an index is in bounds.
+		 * 
+		 * @param c
+		 * @param r
+		 * @return
+		 */
 		public boolean inBounds(int c, int r) {
 			if (c < getBoardWidth() && c >= 0 && r < getBoardHeight() && r >= 0) {
 				return true;
 			}
 			return false;
 		}
-		
+		/**
+		 * Checks if an index has been marked.
+		 * 
+		 * @param c
+		 * @param r
+		 * @return
+		 */
 		public boolean isMarked(int c, int r) {
 			Button bt = (Button)nodeAt(c, r);
 			return bt.getText().equals("?") || bt.getText().equals(FLAG);
 		}
-		
+		/**
+		 * 
+		 * @return Width of the board.
+		 */
 		public int getBoardWidth() {
 			return width;
 		}
-		
+		/**
+		 * 
+		 * @return Height of the board.
+		 */
 		public int getBoardHeight() {
 			return height;
 		}
