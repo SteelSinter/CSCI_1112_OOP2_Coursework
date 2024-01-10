@@ -7,6 +7,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+/**
+ * Mine clearing game.
+ * 
+ * @author James Jesus
+ *
+ */
 public class Minesweeper extends Application {
 	final String BUTTON_STYLE = "-fx-border-radius: 0; -fx-border-color: #999999;"
 			+ " -fx-background-radius: 0; -fx-background-color: #ffffff;"/* -fx-text-fill: #999999*/;
@@ -40,8 +46,11 @@ public class Minesweeper extends Application {
 		private boolean[][] matrix;
 		private int[][] numberMatrix;
 		private boolean firstMove = true;
+		private int width, height;
 		
 		Board(int width, int height) {
+			this.width = width;
+			this.height = height;
 			matrix = new boolean[width][height];
 			numberMatrix = new int[width][height];
 			for (int c = 0; c < width; c++) {
@@ -56,6 +65,7 @@ public class Minesweeper extends Application {
 					bt.setPadding(new Insets(0));
 					
 					bt.setOnMouseClicked(e -> {
+						//System.out.println("C:" + col + " " + "R:" + row);
 						switch (e.getButton().toString()) {
 						case "PRIMARY":
 							dig(col, row);
@@ -68,7 +78,6 @@ public class Minesweeper extends Application {
 					add(bt, c, r);
 				}
 			}
-			
 		}
 		
 		private void addMines(int mines, int firstC, int firstR) {
@@ -80,7 +89,7 @@ public class Minesweeper extends Application {
 						if (rand == mineChance && c != firstC && r != firstR && !isMine(c, r)) {
 							matrix[c][r] = true;
 							mines--;
-							System.out.println(mines);
+							// System.out.println(mines); gets -1 sometimes
 						}
 					}
 				}
@@ -94,23 +103,37 @@ public class Minesweeper extends Application {
 					Button bt = (Button)nodeAt(c, r);
 					if (isMine(c, r)) {
 						numberMatrix[c][r] = -1;
+						return;
 					}
-					else {
-						// count mines aorund it
-					}
+					numberMatrix[c][r] = countBorderingMines(c, r);
 				}
 			}
 		}
 		
+		private int countBorderingMines(int col, int row) {
+			int mines = 0;
+			for (int c = col - 1; c <  col + 1; c++) {
+				for (int r = row - 1; r < row + 1; r++) {
+					if (inBounds(col + c, row + r) && isMine(col + c, row + r) && !(c == 0 && r == 0)) {
+						mines++;
+					}
+				}
+			}
+			return mines;
+		}
+		
 		public void dig(int c, int r) {
 			Button bt = (Button)nodeAt(c, r);
-			//System.out.println("C:" + c + " " + "R:" + r);
 			if (firstMove) {
 				addMines(MINES, c, r);
+				countMines();
 			}
 			if (isMine(c, r) && !isMarked(c, r)) {
 				bt.setDisable(true);
 				bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
+			}
+			if (!isMine(c, r) && !isMarked(c, r)) {
+				bt.setText(String.valueOf(numberMatrix[c][r]));
 			}
 		}
 		
@@ -127,8 +150,6 @@ public class Minesweeper extends Application {
 			case "?":
 				b.setText(" ");
 			}
-			System.out.println("Right click");
-			System.out.println("C:" + c + " " + "R:" + r);
 		}
 		
 		public void revealMines() {
@@ -151,14 +172,35 @@ public class Minesweeper extends Application {
 		    }
 		    return null;
 		}
-		
+		/**
+		 * Checks a spot for a mine.
+		 * 
+		 * @param c column
+		 * @param r row
+		 * @return True if that spot is a mine.
+		 */
 		public boolean isMine(int c, int r) {
 			return matrix[c][r];
+		}
+		
+		public boolean inBounds(int c, int r) {
+			if (c < getBoardWidth() && c > 0 && r < getBoardHeight() && r > 0) {
+				return true;
+			}
+			return false;
 		}
 		
 		public boolean isMarked(int c, int r) {
 			Button bt = (Button)nodeAt(c, r);
 			return bt.getText().equals("?") || bt.getText().equals(FLAG);
+		}
+		
+		public int getBoardWidth() {
+			return width;
+		}
+		
+		public int getBoardHeight() {
+			return height;
 		}
 	}
 
