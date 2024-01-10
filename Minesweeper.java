@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -18,19 +19,27 @@ public class Minesweeper extends Application {
 	final String BUTTON_STYLE = "-fx-border-radius: 0; -fx-border-color: #999999;"
 			+ " -fx-background-radius: 0; -fx-background-color: #ffffff;"/* -fx-text-fill: #999999*/;
 	final String FLAG = "P";
-	int mines = 3;
-	int width = 5, height = 5, squareSize = 35;
+	int mines = 15;
+	int width = 10, height = 10, squareSize = 35;
 	
 	@Override
 	public void start(Stage mainStage) {
-		
-		Pane pane = new Pane();
+		Button btReset = new Button("reset");
 		
 		Board board = new Board(width, height);
-		pane.getChildren().add(board);
 		
-		Scene scene = new Scene(pane, width * squareSize, height * squareSize);
+		Pane pane = new Pane(board);
+		
+		VBox vBox = new VBox();
+		vBox.getChildren().addAll(btReset, pane);
+		
+		Scene scene = new Scene(vBox, width * squareSize, height * squareSize + 30);
 		// size of window is based on grid until menu at top is added.
+		
+		btReset.setOnAction(e -> {
+			pane.getChildren().clear();
+			pane.getChildren().add(new Board(width, height));
+		});
 		
 		mainStage.setScene(scene);
 		mainStage.setResizable(false);
@@ -202,12 +211,13 @@ public class Minesweeper extends Application {
 				if (number == 0)
 					digAround(c, r);
 				++squaresRevealed;
-				if (squaresRevealed >= (getWidth() * getHeight()) - mines) {
+				if (squaresRevealed >= (width * height) - mines) {
 					win();
 				}
 				System.out.println(squaresRevealed);
-				System.out.println(getWidth());
-				System.out.println(getHeight());
+				System.out.println("width " + getWidth());
+				System.out.println("height " + getHeight());
+				System.out.println("mines " + mines);
 				System.out.println((getWidth() * getHeight()) - mines);
 			}
 		}
