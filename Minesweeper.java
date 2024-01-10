@@ -110,7 +110,7 @@ public class Minesweeper extends Application {
 		
 		private int countBorderingMines(int col, int row) {
 			int mines = 0;
-			if (inBounds(c, r))
+			if (inBounds(c, r) &&)
 			return mines;
 		}
 		
