@@ -106,6 +106,7 @@ public class Minesweeper extends Application {
 						return;
 					}
 					numberMatrix[c][r] = countBorderingMines(c, r);
+					System.out.println(countBorderingMines(c, r));
 				}
 			}
 		}
