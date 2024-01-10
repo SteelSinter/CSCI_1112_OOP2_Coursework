@@ -132,7 +132,9 @@ public class Minesweeper extends Application {
 				bt.setStyle(BUTTON_STYLE + ";-fx-background-color: #ff0000");
 			}
 			if (!isMine(c, r) && !isMarked(c, r)) {
+				System.out.println(numberMatrix[c][r]);
 				bt.setText(String.valueOf(numberMatrix[c][r]));
+				System.out.println(bt.getText());
 			}
 		}
 		
