@@ -18,8 +18,8 @@ public class Minesweeper extends Application {
 	final String BUTTON_STYLE = "-fx-border-radius: 0; -fx-border-color: #999999;"
 			+ " -fx-background-radius: 0; -fx-background-color: #ffffff;"/* -fx-text-fill: #999999*/;
 	final String FLAG = "P";
-	int mines = 15;
-	int width = 10, height = 10, squareSize = 35;
+	int mines = 3;
+	int width = 5, height = 5, squareSize = 35;
 	
 	@Override
 	public void start(Stage mainStage) {
@@ -81,9 +81,6 @@ public class Minesweeper extends Application {
 							flag(col, row);
 							break;
 						}
-						
-						if (squaresRevealed >= getWidth() * getHeight() - mines)
-							win();
 					});
 					add(bt, c, r);
 				}
@@ -204,8 +201,15 @@ public class Minesweeper extends Application {
 				bt.setTextFill(setNumberColor(number));
 				if (number == 0)
 					digAround(c, r);
+				++squaresRevealed;
+				if (squaresRevealed >= (getWidth() * getHeight()) - mines) {
+					win();
+				}
+				System.out.println(squaresRevealed);
+				System.out.println(getWidth());
+				System.out.println(getHeight());
+				System.out.println((getWidth() * getHeight()) - mines);
 			}
-			squaresRevealed++;
 		}
 		/**
 		 * Flags or marks a spot.
@@ -214,10 +218,10 @@ public class Minesweeper extends Application {
 		 */
 		public void flag(int c, int r) {
 			Button b = (Button)nodeAt(c, r);
-			System.out.println(r);
 			switch (b.getText()) {
 			case " ":
 				b.setText(FLAG);
+				b.setTextFill(Color.RED);
 				break;
 			case FLAG:
 				b.setText("?");
