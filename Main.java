@@ -55,7 +55,9 @@ public class Main extends Application {
 		Application.launch(args);
 
 	}
-	
+	/**
+	 * Holds all the data and operations for the game board.
+	 */
 	class Board extends GridPane {
 		private boolean[][] matrix;
 		private int[][] numberMatrix;
@@ -63,7 +65,7 @@ public class Main extends Application {
 		private int width, height;
 		int squaresRevealed = 0;
 		/**
-		 * Holds all the data and operations for the game board.
+		 * 
 		 * 
 		 * @param width Width of the board.
 		 * @param height Height of the board.
