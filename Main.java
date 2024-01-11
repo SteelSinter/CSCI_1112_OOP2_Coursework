@@ -32,12 +32,14 @@ public class Main extends Application {
 		btReset.setMinSize(squareSize * 2, squareSize);
 		btReset.setMaxSize(squareSize * 2, squareSize);
 		btReset.setFont(new Font("", squareSize * .45));
+		btReset.setAlignment(Pos.CENTER);
 		
 		Board board = new Board(width, height);
 		
 		Pane gamePane = new Pane(board);
 		
 		VBox vBox = new VBox(); 
+		vBox.getChildren().addAll(btReset, gamePane);
 		Scene scene = new Scene(vBox, width * squareSize, height * squareSize + squareSize);
 		
 		btReset.setOnAction(e -> {
