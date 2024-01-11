@@ -40,6 +40,7 @@ public class Main extends Application {
 		
 		VBox vBox = new VBox(); 
 		vBox.getChildren().addAll(btReset, gamePane);
+		vBox.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(vBox, width * squareSize, height * squareSize + squareSize);
 		
 		btReset.setOnAction(e -> {
