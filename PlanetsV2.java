@@ -46,7 +46,9 @@ public class PlanetsV2 extends Application {
 		pt.setDuration(Duration.millis(speed * YEAR * TIME_SCALE));
 		pt.setInterpolator(Interpolator.LINEAR);
 		pt.setCycleCount(Timeline.INDEFINITE);
-		pt.play();
+		new Thread(() -> {
+			pt.play();
+		}).start();
 	}
 
 }
@@ -62,10 +64,11 @@ class OrbitPath extends Circle {
 		super(r);
 		setFill(Color.TRANSPARENT);
 		setStroke(Color.RED);
-		this.centerXProperty().bind(b.centerXProperty());
-		this.centerYProperty().addListener(ov -> {
-			//////////////////
-		});
+		new Thread(() -> {
+			while (true) {
+				this.setTranslateX(b.getTranslateX());
+			}
+		}).start();
 	}
 }
 
